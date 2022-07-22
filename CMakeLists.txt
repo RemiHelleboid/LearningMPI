@@ -44,3 +44,7 @@ target_link_libraries(example_add_arrays MPI::MPI_CXX Boost::mpi Boost::serializ
 add_executable(example_broadcast example_brodcast.cpp)
 target_link_libraries(example_broadcast MPI::MPI_CXX) 
 
+
+add_executable(example_add_two_arrays example_add_two_arrays.cpp)
+target_link_libraries(example_add_two_arrays MPI::MPI_CXX) 
+
