@@ -37,14 +37,15 @@ target_link_libraries(example_hello_world MPI::MPI_CXX)
 add_executable(example_size_rank example_size_rank.cpp)
 target_link_libraries(example_size_rank MPI::MPI_CXX Boost::mpi Boost::serialization)
 
-
 add_executable(example_add_arrays example_send_arrays.cpp)
 target_link_libraries(example_add_arrays MPI::MPI_CXX Boost::mpi Boost::serialization)
 
 add_executable(example_broadcast example_brodcast.cpp)
 target_link_libraries(example_broadcast MPI::MPI_CXX) 
 
-
 add_executable(example_add_two_arrays example_add_two_arrays.cpp)
 target_link_libraries(example_add_two_arrays MPI::MPI_CXX) 
+
+add_executable(example_add_two_stdvectors example_add_two_stdvectors.cpp)
+target_link_libraries(example_add_two_stdvectors MPI::MPI_CXX) 
 

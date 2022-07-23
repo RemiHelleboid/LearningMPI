@@ -17,104 +17,107 @@
 #include <stdio.h>   //printf
 #include <stdlib.h>  //malloc
 
+#include <algorithm>
+#include <cmath>
 #include <iostream>
+#include <vector>
 
 #include "mpi.h"  // must have a system with an MPI library
 
 /*
  * Definitions
  */
-#define MASTER 0      // One process will take care of initialization
-#define ARRAY_SIZE 8  // Size of arrays that will be added together.
+#define MASTER 0    // One process will take care of initialization
+#define ARRAY_SIZE  // Size of arrays that will be added together.
 
 /*
  *  In MPI programs, the main function for the program is run on every
  *  process that gets initialized when you start up this code using mpirun.
  */
 int main(int argc, char *argv[]) {
-    // elements of arrays a and b will be added
-    // and placed in array c
-    int a[ARRAY_SIZE];
-    int b[ARRAY_SIZE];
-    int c[ARRAY_SIZE];
+    std::size_t number_values = pow(2, 27);
+    MPI_Status  status;
 
-    int total_proc;      // total nuber of processes
-    int rank;            // rank of each process
-    int n_per_proc;      // elements per process
-    int n = ARRAY_SIZE;  // number of array elements
-    int i;               // loop index
-
-    MPI_Status status;  // not used in this arguably poor example
-                        // that is devoid of error checking.
-
-    // 1. Initialization of MPI environment
+    int number_processes;
+    int process_rank;
     MPI_Init(&argc, &argv);
-    MPI_Comm_size(MPI_COMM_WORLD, &total_proc);
-    // 2. Now you know the total number of processes running in parallel
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    // 3. Now you know the rank of the current process
+    MPI_Comm_size(MPI_COMM_WORLD, &number_processes);
+    MPI_Comm_rank(MPI_COMM_WORLD, &process_rank);
 
-    // Smaller arrays that will be held on each separate process
+    std::vector<double> list_1;
+    std::vector<double> list_2;
+    std::vector<double> list_sum;
+    if (process_rank == MASTER) {
+        std::cout << "Master process: " << process_rank << std::endl;
+        std::cout << "Number of processes: " << number_processes << std::endl;
+        std::cout << "Number of values: " << number_values << std::endl;
 
+        list_1.resize(number_values);
+        list_2.resize(number_values);
+        list_sum.resize(number_values);
 
-    // 4. We choose process rank 0 to be the root, or master,
-    // which will be used to  initialize the full arrays.
-    if (rank == MASTER) {
-        // initialize arrays a and b with consecutive integer values
-        // as a simple example
-        for (i = 0; i < n; i++)
-            a[i] = i;
-        for (i = 0; i < n; i++)
-            b[i] = i;
-    }
-
-    // All processes take part in the calculations concurrently
-
-    // determine how many elements each process will work on
-    n_per_proc = n / total_proc;
-    /////// NOTE:
-    // In this simple version, the number of processes needs to
-    // divide evenly into the number of elements in the array
-    ///////////
-
-    // 5. Initialize my smaller subsections of the larger array
-    int ap[n_per_proc];
-    int bp[n_per_proc];
-    int cp[n_per_proc];
-
-    // 6.
-    // scattering array a from MASTER node out to the other nodes
-    MPI_Scatter(a, n_per_proc, MPI_INT, ap, n_per_proc, MPI_INT, MASTER, MPI_COMM_WORLD);
-    // scattering array b from MASTER node out to the other node
-    MPI_Scatter(b, n_per_proc, MPI_INT, bp, n_per_proc, MPI_INT, MASTER, MPI_COMM_WORLD);
-
-    // 7. Compute the addition of elements in my subsection of the array
-    for (i = 0; i < n_per_proc; i++)
-        cp[i] = ap[i] + bp[i];
-
-    // 8. MASTER node gathering array c from the workers
-    MPI_Gather(cp, n_per_proc, MPI_INT, c, n_per_proc, MPI_INT, MASTER, MPI_COMM_WORLD);
-
-    // all concurrent processes are finished once they all communicate
-    // data back to the master via the gather function.
-
-    // Master process gets to here only when it has been able to gather from all processes
-    if (rank == MASTER) {
-        // sanity check the result  (a test we would eventually leave out)
-        int good = 1;
-        for (i = 0; i < n; i++) {
-            // printf ("%d ", c[i]);
-            if (c[i] != a[i] + b[i]) {
-                std::cout << "Wrong addition at index " << i << std::endl;
-                good = 0;
-                break;
-            }
-        }
-        if (good) {
-            std::cout << "All correct!" << std::endl;
+        for (std::size_t i = 0; i < number_values; i++) {
+            list_1[i] = i;
+            list_2[i] = i;
         }
     }
-    // 9. Terminate MPI Environment and Processes
+
+    int                 number_element_per_process = number_values / number_processes;
+    std::vector<double> shunk_list_1(number_element_per_process);
+    std::vector<double> shunk_list_2(number_element_per_process);
+    std::vector<double> shunk_list_sum(number_element_per_process);
+
+    MPI_Scatter(&list_1[0],
+                number_element_per_process,
+                MPI_DOUBLE,
+                &shunk_list_1[0],
+                number_element_per_process,
+                MPI_DOUBLE,
+                MASTER,
+                MPI_COMM_WORLD);
+
+    MPI_Scatter(&list_2[0],
+                number_element_per_process,
+                MPI_DOUBLE,
+                &shunk_list_2[0],
+                number_element_per_process,
+                MPI_DOUBLE,
+                MASTER,
+                MPI_COMM_WORLD);
+    
+    if (process_rank == MASTER) {
+        list_1.clear();
+        list_2.clear();
+    }
+
+    for (std::size_t idx_value = 0; idx_value < number_element_per_process; ++idx_value) {
+        shunk_list_sum[idx_value] = shunk_list_1[idx_value] * shunk_list_2[idx_value];
+    }
+
+    MPI_Gather(&shunk_list_sum[0],
+               number_element_per_process,
+               MPI_DOUBLE,
+               &list_sum[0],
+               number_element_per_process,
+               MPI_DOUBLE,
+               MASTER,
+               MPI_COMM_WORLD);
+
+    // if (process_rank == MASTER) {
+    //     bool error = false;
+    //     for (std::size_t i = 0; i < number_values; i++) {
+    //         if (list_sum[i] != i + i) {
+    //             error = true;
+    //             std::cout << "Error: " << i << " * " << i << " = " << list_sum[i] << std::endl;
+    //         }
+    //     }
+    //     if (error) {
+    //         std::cout << "Error: Sum of two vectors is not equal to the sum of the two vectors." << std::endl;
+    //     } else {
+    //         std::cout << "Success: Sum of two vectors is equal to the sum of the two vectors." << std::endl;
+    //     }
+    // }
+
     MPI_Finalize();
 
     return 0;
