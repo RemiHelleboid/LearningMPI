@@ -1,0 +1,128 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "examples",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "examples",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "Armin",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "example_add_two_arrays::@714eac15f71a94114fdf",
+					"jsonFile" : "target-example_add_two_arrays-Debug-b1435600067ed9406025.json",
+					"name" : "example_add_two_arrays",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "example_add_two_stdvectors::@714eac15f71a94114fdf",
+					"jsonFile" : "target-example_add_two_stdvectors-Debug-951ed73230f1a6d1004e.json",
+					"name" : "example_add_two_stdvectors",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "example_brodcast::@714eac15f71a94114fdf",
+					"jsonFile" : "target-example_brodcast-Debug-bb2ca1e5b35d66dc0bac.json",
+					"name" : "example_brodcast",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "example_hello_world::@714eac15f71a94114fdf",
+					"jsonFile" : "target-example_hello_world-Debug-cc1af776f11155cf9d7a.json",
+					"name" : "example_hello_world",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "example_many_matrix_determinants::@714eac15f71a94114fdf",
+					"jsonFile" : "target-example_many_matrix_determinants-Debug-106744130fddf4aae8f7.json",
+					"name" : "example_many_matrix_determinants",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "example_send_arrays::@714eac15f71a94114fdf",
+					"jsonFile" : "target-example_send_arrays-Debug-f0d971071f77ba35406e.json",
+					"name" : "example_send_arrays",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "example_size_rank::@714eac15f71a94114fdf",
+					"jsonFile" : "target-example_size_rank-Debug-4795b5b204befe9e9897.json",
+					"name" : "example_size_rank",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/remi/LearningMPI/build",
+		"source" : "/home/remi/LearningMPI"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 2
+	}
+}

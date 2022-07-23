@@ -10,7 +10,27 @@ include(FetchContent)
 include(CheckCXXCompilerFlag)
 include(CMakePrintHelpers)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 set(CMAKE_CXX_STANDARD 20)
+
+# Handling build type nicely Set a default build type if none was specified
+set(default_build_type "Release")
+if(EXISTS "${CMAKE_SOURCE_DIR}/.git")
+  set(default_build_type "RelWithDebInfo")
+endif()
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(
+    STATUS
+      "Setting build type to '${default_build_type}' as none was specified.")
+  set(CMAKE_BUILD_TYPE
+      "${default_build_type}"
+      CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
+                                               "MinSizeRel" "RelWithDebInfo")
+endif()
 
 # this variable controls the default value of the options which are normally set
 # to ON (useful if you want to configure a minimal version of Gmsh: e.g. "cmake
@@ -30,22 +50,4 @@ if(NOT Boost_FOUND)
   message(FATAL_ERROR "Boost Not found")
 endif()
 
-
-add_executable(example_hello_world example_hello_world.cpp)
-target_link_libraries(example_hello_world MPI::MPI_CXX)
-
-add_executable(example_size_rank example_size_rank.cpp)
-target_link_libraries(example_size_rank MPI::MPI_CXX Boost::mpi Boost::serialization)
-
-add_executable(example_add_arrays example_send_arrays.cpp)
-target_link_libraries(example_add_arrays MPI::MPI_CXX Boost::mpi Boost::serialization)
-
-add_executable(example_broadcast example_brodcast.cpp)
-target_link_libraries(example_broadcast MPI::MPI_CXX) 
-
-add_executable(example_add_two_arrays example_add_two_arrays.cpp)
-target_link_libraries(example_add_two_arrays MPI::MPI_CXX) 
-
-add_executable(example_add_two_stdvectors example_add_two_stdvectors.cpp)
-target_link_libraries(example_add_two_stdvectors MPI::MPI_CXX) 
-
+add_subdirectory(examples)
