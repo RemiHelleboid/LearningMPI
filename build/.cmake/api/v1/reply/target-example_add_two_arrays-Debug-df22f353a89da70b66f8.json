@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "examples/example_hello_world"
+			"path" : "examples/example_add_two_arrays"
 		}
 	],
 	"backtrace" : 1,
@@ -90,6 +90,11 @@
 					"backtrace" : 6,
 					"isSystem" : true,
 					"path" : "/home/remi/anaconda3/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/home/remi/anaconda3/include/python3.8"
 				}
 			],
 			"language" : "CXX",
@@ -107,7 +112,7 @@
 			]
 		}
 	],
-	"id" : "example_hello_world::@714eac15f71a94114fdf",
+	"id" : "example_add_two_arrays::@714eac15f71a94114fdf",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -130,6 +135,11 @@
 				"role" : "libraries"
 			},
 			{
+				"backtrace" : 2,
+				"fragment" : "/home/remi/anaconda3/lib/libpython3.8.so",
+				"role" : "libraries"
+			},
+			{
 				"fragment" : "/home/remi/anaconda3/lib/libmpicxx.so",
 				"role" : "libraries"
 			},
@@ -140,8 +150,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "example_hello_world",
-	"nameOnDisk" : "example_hello_world",
+	"name" : "example_add_two_arrays",
+	"nameOnDisk" : "example_add_two_arrays",
 	"paths" : 
 	{
 		"build" : "examples",
@@ -162,7 +172,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "examples/example_hello_world.cpp",
+			"path" : "examples/example_add_two_arrays.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

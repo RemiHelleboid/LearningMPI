@@ -50,4 +50,6 @@ if(NOT Boost_FOUND)
   message(FATAL_ERROR "Boost Not found")
 endif()
 
+find_package(Python REQUIRED Development)
+
 add_subdirectory(examples)

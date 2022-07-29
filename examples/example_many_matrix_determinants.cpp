@@ -17,6 +17,8 @@
 #include <random>
 #include <vector>
 
+#include <python3/Python.h>
+
 #include "square_matrix.hpp"
 #include "utils.hpp"
 

@@ -90,6 +90,11 @@
 					"backtrace" : 6,
 					"isSystem" : true,
 					"path" : "/home/remi/anaconda3/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/home/remi/anaconda3/include/python3.8"
 				}
 			],
 			"language" : "CXX",
@@ -127,6 +132,11 @@
 			},
 			{
 				"fragment" : "-Wl,-rpath,/home/remi/anaconda3/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "/home/remi/anaconda3/lib/libpython3.8.so",
 				"role" : "libraries"
 			},
 			{
