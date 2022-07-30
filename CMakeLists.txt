@@ -53,3 +53,4 @@ endif()
 find_package(Python REQUIRED Development)
 
 add_subdirectory(examples)
+add_subdirectory(boostMPI)
