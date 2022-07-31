@@ -32,6 +32,28 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
                                                "MinSizeRel" "RelWithDebInfo")
 endif()
 
+include(FetchContent)
+
+# Find Eigen library Find Eigen library
+FetchContent_Declare(
+  Eigen
+  GIT_REPOSITORY "https://gitlab.com/libeigen/eigen.git"
+  GIT_TAG "3.4.0"
+  GIT_SHALLOW TRUE
+  GIT_PROGRESS TRUE)
+
+find_package(Eigen3 NO_MODULE)
+
+if(NOT Eigen3_FOUND)
+  set(EIGEN_BUILD_DOC OFF)
+  set(BUILD_TESTING OFF)
+  set(EIGEN_BUILD_PKGCONFIG OFF)
+  message("Fetching Eigen3 lib ...")
+  add_compile_definitions(EIGEN_USE_LAPACK=0)
+  FetchContent_MakeAvailable(Eigen)
+endif()
+
+
 # this variable controls the default value of the options which are normally set
 # to ON (useful if you want to configure a minimal version of Gmsh: e.g. "cmake
 # -DDEFAULT=0 -DENABLE_POST=1 -DENABLE_PARSER=1")

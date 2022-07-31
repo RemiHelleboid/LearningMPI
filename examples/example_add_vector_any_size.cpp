@@ -39,6 +39,13 @@ double complicated_function(double x, double y) {
  */
 int main(int argc, char *argv[]) {
     // std::size_t number_values = pow(2, 4);
+
+    if (argc != 2) {
+        std::cout << "Error: missing argument" << std::endl;
+        std::cout << "Usage: " << argv[0] << " <number_values>" << std::endl;
+        return 1;
+    }
+
     std::size_t number_values = std::atoi(argv[1]);
     MPI_Status  status;
 
