@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
 
     std::size_t size_matrix         = std::atoi(argv[1]);
     std::size_t number_values       = std::atoi(argv[2]);
-    std::size_t number_eigen_values = 1;
+    std::size_t number_eigen_values = 20;
     double      min_mean_random     = -5.0;
     double      max_mean_random     = 5.0;
     double      delta_mean          = (max_mean_random - min_mean_random) / (number_values - 1);
@@ -131,18 +131,33 @@ int main(int argc, char *argv[]) {
             chunk_list_first_eigenvalue[idx_value * number_eigen_values + idx_eigen_value] = first_eigen_values[idx_eigen_value];
         }
     }
+    MPI_Barrier(MPI_COMM_WORLD);
 
     std::vector<int> gather_counts_element_per_process(number_processes);
     std::vector<int> gather_displacements_element_per_process(number_processes);
     for (int i = 0; i < number_processes; i++) {
-        if (i == process_rank) {
             gather_counts_element_per_process[i] = counts_element_per_process[i] * number_eigen_values;
-            gather_displacements_element_per_process[i] *= displacements_element_per_process[i] * number_eigen_values;
+            std::cout << "Process " << process_rank << " wWWWwill gather " << gather_counts_element_per_process[i] << " elements" << std::endl;
+            gather_displacements_element_per_process[i] = displacements_element_per_process[i] * number_eigen_values;
+    }
+
+    if (process_rank == MASTER) {
+        std::cout << "----------------------------------------------- " << std::endl;
+        for (int i = 0; i < number_processes; i++) {
+            std::cout << "kProcess " << i << " will send " << gather_counts_element_per_process[i] << " elements" << std::endl;
+            std::cout << "kProcess " << i << " with displacement " << gather_displacements_element_per_process[i] << " elements"
+                      << std::endl;
         }
+        std::cout << "----------------------------------------------- " << std::endl;
+    } else {
+        std::cout << "Process " << process_rank << " will send " << gather_counts_element_per_process[process_rank]
+                  << " elements" << std::endl;
+        std::cout << "Process " << process_rank << " with displacement " << gather_displacements_element_per_process[process_rank]
+                  << " elements" << std::endl;
     }
 
     double t3 = MPI_Wtime();
-    // MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Barrier(MPI_COMM_WORLD);
 
     double t_gath = MPI_Wtime();
     MPI_Gatherv(chunk_list_first_eigenvalue.data(),
@@ -158,21 +173,24 @@ int main(int argc, char *argv[]) {
     t_gath = MPI_Wtime() - t_gath;
     std::cout << "Process " << process_rank << " gathered in " << t_gath << " seconds" << std::endl;
 
-    // double t4 = MPI_Wtime();
 
-    // std::cout << "----------------------------------------------------------" << std::endl;
-    // std::cout << "process " << process_rank <<  " ----------------------------> total time: " << t4 - t1 << std::endl;
-    // std::cout << "----------------------------------------------------------" << std::endl;
-    // std::cout << "Export results to file" << std::endl;
-    // std::ofstream file_output("output_2.csv");
-    // for (std::size_t i = 0; i < number_values; i++) {
-    //     file_output << list_means[i] << ',';
-    //     for (std::size_t j = 0; j < number_eigen_values; j++) {
-    //         file_output << list_first_eigenvalues[i * number_eigen_values + j] << ',';
-    //     }
-    //     file_output << std::endl;
-    // }
-    // file_output.close();
+    MPI_Barrier(MPI_COMM_WORLD);
+    double t4 = MPI_Wtime();
+    if (process_rank == MASTER) {
+        std::cout << "----------------------------------------------------------" << std::endl;
+        std::cout << "process " << process_rank << " ----------------------------> total time: " << t4 - t1 << std::endl;
+        std::cout << "----------------------------------------------------------" << std::endl;
+        std::cout << "Export results to file" << std::endl;
+        std::ofstream file_output("output_3.csv");
+        for (std::size_t i = 0; i < number_values; i++) {
+            file_output << list_means[i] << ',';
+            for (std::size_t j = 0; j < number_eigen_values; j++) {
+                file_output << list_first_eigenvalues[i * number_eigen_values + j] << ',';
+            }
+            file_output << std::endl;
+        }
+        file_output.close();
+    }
 
     MPI_Finalize();
 
