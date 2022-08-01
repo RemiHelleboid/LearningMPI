@@ -127,6 +127,7 @@ int main(int argc, char *argv[]) {
                 MPI_DOUBLE, MASTER, MPI_COMM_WORLD);
 
     double t4 = MPI_Wtime();
+    std::cout << "Process gather time" << process_rank << ": " << t4 - t3 << std::endl;
     // std::cout << "Process gather time " << process_rank << ": " << t4 - t3 << std::endl;
     // if (process_rank == MASTER) {
     //     std::cout << "List of first eigenvalues: " << std::endl;

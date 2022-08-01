@@ -10,8 +10,10 @@ include(FetchContent)
 include(CheckCXXCompilerFlag)
 include(CMakePrintHelpers)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+option(ENABLE_BOOST_MPI
+       "Build examples using boost::mpi in addition to MPI examples." ON)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 20)
 
 # Handling build type nicely Set a default build type if none was specified
@@ -53,7 +55,6 @@ if(NOT Eigen3_FOUND)
   FetchContent_MakeAvailable(Eigen)
 endif()
 
-
 # this variable controls the default value of the options which are normally set
 # to ON (useful if you want to configure a minimal version of Gmsh: e.g. "cmake
 # -DDEFAULT=0 -DENABLE_POST=1 -DENABLE_PARSER=1")
@@ -65,14 +66,16 @@ find_package(MPI)
 add_definitions(-DOMPI_SKIP_MPICXX)
 include_directories(SYSTEM ${MPI_INCLUDE_PATH})
 
-# Find boost set(Boost_USE_STATIC_LIBS ON)
-find_package(Boost QUIET REQUIRED COMPONENTS program_options timer mpi
-                                             serialization)
-if(NOT Boost_FOUND)
-  message(FATAL_ERROR "Boost Not found")
+add_subdirectory(examples)
+
+
+if(ENABLE_BOOST_MPI)
+  # Find boost set(Boost_USE_STATIC_LIBS ON)
+  find_package(Boost QUIET REQUIRED COMPONENTS program_options timer mpi
+                                               serialization)
+  if(NOT Boost_FOUND)
+    message(FATAL_ERROR "Boost Not found")
+  endif()
+  add_subdirectory(boostMPI)
 endif()
 
-find_package(Python REQUIRED Development)
-
-add_subdirectory(examples)
-add_subdirectory(boostMPI)
