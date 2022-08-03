@@ -4,7 +4,9 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/src"
+                "${workspaceFolder}/src",
+                "/usr/include/x86_64-linux-gnu/mpich",
+                "/usr/local/include/eigen3"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

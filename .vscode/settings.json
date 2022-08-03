@@ -66,6 +66,7 @@
         "valarray": "cpp",
         "variant": "cpp",
         "bit": "cpp",
-        "__nullptr": "cpp"
+        "__nullptr": "cpp",
+        "source_location": "cpp"
     }
 }
