@@ -34,6 +34,10 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
                                                "MinSizeRel" "RelWithDebInfo")
 endif()
 
+# Find OpenMP
+find_package(OpenMP REQUIRED)
+
+
 include(FetchContent)
 
 # Find Eigen library Find Eigen library

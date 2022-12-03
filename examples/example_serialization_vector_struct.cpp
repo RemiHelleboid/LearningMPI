@@ -35,6 +35,8 @@ typedef struct vector_k {
     double norm() const { return std::sqrt(m_kx * m_kx + m_ky * m_ky + m_kz * m_kz); }
 } vector_k;
 
+
+
 int main(int argc, char** argv) {
     if (argc < 1) {
         std::cout << "Error: missing argument" << std::endl;
@@ -128,7 +130,7 @@ int main(int argc, char** argv) {
                 MPI_DOUBLE,
                 MASTER,
                 MPI_COMM_WORLD);
-
+    
     // Print the vector of structs.
     // std::cout << "Number vector k " << number_vector_k << std::endl;
     // if (process_rank == MASTER) {
@@ -136,7 +138,6 @@ int main(int argc, char** argv) {
     //         std::cout << "Vector " << i << ": Norm -> " << list_norm_k[i] << std::endl;
     //     }
     // }
-
 
     MPI_Finalize();
     return EXIT_SUCCESS;
