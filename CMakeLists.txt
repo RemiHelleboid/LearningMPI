@@ -70,16 +70,18 @@ find_package(MPI)
 add_definitions(-DOMPI_SKIP_MPICXX)
 include_directories(SYSTEM ${MPI_INCLUDE_PATH})
 
-add_subdirectory(examples)
+# if(ENABLE_BOOST_MPI)
+#   # Find boost set(Boost_USE_STATIC_LIBS ON)
+#   if(NOT Boost_FOUND)
+#     message(FATAL_ERROR "Boost Not found")
+#   endif()
+#   add_subdirectory(boostMPI)
+# endif()
+
+find_package(Boost QUIET REQUIRED COMPONENTS program_options timer mpi
+                                             serialization)
 
 
-if(ENABLE_BOOST_MPI)
-  # Find boost set(Boost_USE_STATIC_LIBS ON)
-  find_package(Boost QUIET REQUIRED COMPONENTS program_options timer mpi
-                                               serialization)
-  if(NOT Boost_FOUND)
-    message(FATAL_ERROR "Boost Not found")
-  endif()
-  add_subdirectory(boostMPI)
-endif()
+                                             add_subdirectory(examples)
+
 
