@@ -114,10 +114,12 @@ int main(int argc, char** argv) {
         MPI_Recv(&size, 1, MPI_INT, MASTER, 0, MPI_COMM_WORLD, &status);
         char* buffer = (char*)malloc(size);
         MPI_Recv(buffer, size, MPI_CHAR, MASTER, 0, MPI_COMM_WORLD, &status);
+        std::cout << "Process " << process_rank << " received buffer: " << buffer << std::endl;
 
         // Deserialize the particle.
         std::stringstream ss;
         ss.write(buffer, size);
+        std::cout << "Process " << process_rank << " received string: " << ss.str() << std::endl;
         boost::archive::text_iarchive ia(ss);
         Particle p;
         ia >> p;
